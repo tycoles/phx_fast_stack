@@ -25,6 +25,11 @@ defmodule PhxFastStackWeb.Router do
       error_handler: Pow.Phoenix.PlugErrorHandler
   end
 
+  def with_session(conn) do
+    # Add user id to LiveView session with `live "/live-view", session: {__MODULE__, :with_session, []}`
+    %{"current_user_id" => conn.assigns.current_user.id}
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
