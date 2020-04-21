@@ -17,6 +17,10 @@ config :phx_fast_stack, PhxFastStackWeb.Endpoint,
   render_errors: [view: PhxFastStackWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: PhxFastStack.PubSub, adapter: Phoenix.PubSub.PG2]
 
+config :phx_fast_stack, :pow,
+  user: PhxFastStack.Users.User,
+  repo: PhxFastStack.Repo
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
