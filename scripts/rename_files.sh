@@ -1,0 +1,1 @@
+find ./test ./lib -iname "*$1*" -exec sh -c "move_from={}; move_to=\`echo \$move_from | sed s/$1/$2/g\`; mv \$move_from \$move_to" \;

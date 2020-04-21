@@ -1,0 +1,1 @@
+grep -rl $1 . | LANG=C xargs sed -i "" s/$1/$2/g
