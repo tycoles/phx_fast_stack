@@ -55,7 +55,7 @@ defmodule Init do
     IO.puts "Renaming files..."
     rename_files(new_project_name)
 
-    IO.puts "Change remote origin url..."
+    IO.puts "Changing remote origin url..."
     set_new_origin_url(new_project_url)
 
     IO.puts "Cleaning/installing dependencies..."
