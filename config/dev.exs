@@ -28,9 +28,6 @@ config :phx_fast_stack, PhxFastStackWeb.Endpoint,
       "--watch-stdin",
       cd: Path.expand("../assets", __DIR__)
     ]
-  ],
-  live_view: [
-    signing_salt: "SECRET_SALT"
   ]
 
 # ## SSL Support

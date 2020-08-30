@@ -7,7 +7,7 @@ defmodule PhxFastStackWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_phx_fast_stack_key",
-    signing_salt: "DmL1bj0r"
+    signing_salt: "tosGaggQ"
   ]
 
   socket "/socket", PhxFastStackWeb.UserSocket,
@@ -32,7 +32,12 @@ defmodule PhxFastStackWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :phx_fast_stack
   end
+
+  plug Phoenix.LiveDashboard.RequestLogger,
+    param_key: "request_logger",
+    cookie_key: "request_logger"
 
   plug Plug.RequestId
   plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
@@ -44,7 +49,7 @@ defmodule PhxFastStackWeb.Endpoint do
 
   plug Plug.MethodOverride
   plug Plug.Head
-  plug Plug.Session, @session_options
   plug Pow.Plug.Session, otp_app: :phx_fast_stack
+  plug Plug.Session, @session_options
   plug PhxFastStackWeb.Router
 end

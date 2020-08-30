@@ -13,13 +13,10 @@ config :phx_fast_stack,
 # Configures the endpoint
 config :phx_fast_stack, PhxFastStackWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "6ri99ZRU5MA3TbC683DhxIzuFmJACsVqyVOMs9l5k8+6z1jc0/tB1JOSA9P5yVeH",
-  render_errors: [view: PhxFastStackWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: PhxFastStack.PubSub, adapter: Phoenix.PubSub.PG2]
-
-config :phx_fast_stack, :pow,
-  user: PhxFastStack.Users.User,
-  repo: PhxFastStack.Repo
+  secret_key_base: "UdHNPLYWaiXQbaCdhW6RaxrjdIHOI3GtlHQH4qjLN0FjHh44YVuoKCm/JvPacQ2B",
+  render_errors: [view: PhxFastStackWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: PhxFastStack.PubSub,
+  live_view: [signing_salt: "1aOYwQjW"]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -28,6 +25,11 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+# Use Pow for authentication
+config :phx_fast_stack, :pow,
+  user: PhxFastStack.Users.User,
+  repo: PhxFastStack.Repo
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

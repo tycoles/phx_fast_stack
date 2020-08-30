@@ -6,14 +6,17 @@ defmodule PhxFastStack.Application do
   use Application
 
   def start(_type, _args) do
-    # List all child processes to be supervised
     children = [
       # Start the Ecto repository
       PhxFastStack.Repo,
-      # Start the endpoint when the application starts
+      # Start the Telemetry supervisor
+      PhxFastStackWeb.Telemetry,
+      # Start the PubSub system
+      {Phoenix.PubSub, name: PhxFastStack.PubSub},
+      # Start the Endpoint (http/https)
       PhxFastStackWeb.Endpoint
-      # Starts a worker by calling: PhxFastStack.Worker.start_link(arg)
-      # {PhxFastStack.Worker, arg},
+      # Start a worker by calling: PhxFastStack.Worker.start_link(arg)
+      # {PhxFastStack.Worker, arg}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

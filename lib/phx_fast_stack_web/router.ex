@@ -1,23 +1,18 @@
 defmodule PhxFastStackWeb.Router do
   use PhxFastStackWeb, :router
   use Pow.Phoenix.Router
-  use PowAssent.Phoenix.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
-    # plug :fetch_flash
     plug :fetch_live_flash
+    plug :put_root_layout, {PhxFastStackWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug :put_root_layout, {PhxFastStackWeb.LayoutView, :root}
   end
 
-  pipeline :skip_csrf_protection do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    plug :put_secure_browser_headers
+  pipeline :api do
+    plug :accepts, ["json"]
   end
 
   pipeline :protected do
@@ -25,39 +20,42 @@ defmodule PhxFastStackWeb.Router do
       error_handler: Pow.Phoenix.PlugErrorHandler
   end
 
-  def with_session(conn) do
-    # Add user id to LiveView session with `live "/live-view", session: {__MODULE__, :with_session, []}`
-    %{"current_user_id" => conn.assigns.current_user.id}
-  end
+  scope "/", PhxFastStackWeb do
+    pipe_through :browser
 
-  pipeline :api do
-    plug :accepts, ["json"]
+    live "/", PageLive, :index
   end
 
   scope "/" do
-    pipe_through :skip_csrf_protection
-
-    pow_assent_authorization_post_callback_routes()
-  end
-
-  scope "/" do
-    pipe_through [:browser]
-
-    get "/", PhxFastStackWeb.PageController, :index
-    live "/demo-live", PhxFastStackWeb.DemoLive
+    pipe_through :browser
 
     pow_routes()
-    pow_assent_routes()
   end
 
   scope "/", PhxFastStackWeb do
     pipe_through [:browser, :protected]
 
-    # Protected routes ...
+    # Add your protected routes here
   end
 
   # Other scopes may use custom stacks.
   # scope "/api", PhxFastStackWeb do
   #   pipe_through :api
   # end
+
+  # Enables LiveDashboard only for development
+  #
+  # If you want to use the LiveDashboard in production, you should put
+  # it behind authentication and allow only admins to access it.
+  # If your application does not have an admins-only section yet,
+  # you can use Plug.BasicAuth to set up some basic authentication
+  # as long as you are also using SSL (which you should anyway).
+  if Mix.env() in [:dev, :test] do
+    import Phoenix.LiveDashboard.Router
+
+    scope "/" do
+      pipe_through :browser
+      live_dashboard "/dashboard", metrics: PhxFastStackWeb.Telemetry
+    end
+  end
 end
